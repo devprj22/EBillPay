@@ -16,11 +16,20 @@ import javax.swing.JPanel;
 
 public class Welcome extends JFrame
 {
+	private static Welcome s_globalAppInstance = null;
+	
 	JPanel panel1,panel2,panel3;
 	JLabel l1,l2;
 	JButton b1,b2,b3,b4;
 	Welcome emp;
-	public Welcome() 
+	
+	public static Welcome GetInstance() {
+		if (s_globalAppInstance == null)
+				s_globalAppInstance = new Welcome();
+		return s_globalAppInstance;
+	}
+	
+	private Welcome() 
 	{
 		setLocation(300, 300);
 		setUndecorated(true);
@@ -96,7 +105,7 @@ public class Welcome extends JFrame
 	
 	public static void main(String args[])
 	{
-		Welcome obj = new Welcome();
+		Welcome obj = Welcome.GetInstance();
 		obj.setVisible(true);
 	}
 }
