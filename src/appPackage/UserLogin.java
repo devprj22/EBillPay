@@ -18,41 +18,43 @@ import javax.swing.JTextField;
 
 public class UserLogin extends JFrame
 {
-	JTextField id;
-	JPasswordField pass;
-	JLabel l1,l2;
-	JButton b1,b2,b3;
-	JPanel panel1;
-	Welcome welo;
-	public UserLogin(String msg, Welcome obj) 
+	private JTextField id;
+	private JPasswordField pass;
+	private JLabel labelUserId, labelPass;
+	private JButton btnLogin, btnReset, btnBack;
+	private JPanel panel1;
+	
+	private static String query = "select * from custdata where id = ? and password = ?";
+	
+	public UserLogin(String msg, Welcome welo) 
 	{
 		super(msg);
-		welo = obj;
+		
 		setSize(400,200);
 		setLayout(new FlowLayout());
 		setLocationRelativeTo(this);
 		setResizable(false);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		
-		l1 = new JLabel("ENTER USER ID :");
-		l2 = new JLabel("ENTER PASSWORD : ");
+		labelUserId = new JLabel("ENTER USER ID :");
+		labelPass = new JLabel("ENTER PASSWORD : ");
 		
 		id = new JTextField(20);
 		pass = new JPasswordField(20);
 		
-		b1 = new JButton("LOGIN", new ImageIcon("admin.jpg"));
-		b2 = new JButton("RESET" , new ImageIcon("undo.png"));
-		b3 = new JButton("BACK" , new ImageIcon("back.png"));
+		btnLogin = new JButton("LOGIN", new ImageIcon("admin.jpg"));
+		btnReset = new JButton("RESET" , new ImageIcon("undo.png"));
+		btnBack = new JButton("BACK" , new ImageIcon("back.png"));
 		
-		add(l1); add(id);
-		add(l2); add(pass);
+		add(labelUserId); add(id);
+		add(labelPass); add(pass);
 		
 		panel1 = new JPanel(new FlowLayout());
-		panel1.add(b1);
-		panel1.add(b2);
-		panel1.add(b3);
+		panel1.add(btnLogin);
+		panel1.add(btnReset);
+		panel1.add(btnBack);
 		
-		b2.addActionListener(new ActionListener() {
+		btnReset.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) 
@@ -62,7 +64,7 @@ public class UserLogin extends JFrame
 			}
 		});
 		
-		b3.addActionListener(new ActionListener() {
+		btnBack.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) 
@@ -74,37 +76,39 @@ public class UserLogin extends JFrame
 		
 		//Coding for the login button
 		
-		b1.addActionListener(new ActionListener() 
+		btnLogin.addActionListener(new ActionListener() 
 		{	
 			@Override
 			public void actionPerformed(ActionEvent e) 
 			{
-				if((id.getText().isEmpty())||(String.copyValueOf(pass.getPassword()).isEmpty()))
+				if(IsAnyFormFieldEmpty())
 				{
 					JOptionPane.showMessageDialog(getParent(), "PLEASE FILL ALL THE FIELDS", "INCOMPLETE DATA", JOptionPane.ERROR_MESSAGE);
 				}
 				else
 				{
-					int flag = 0;
 					String uid="",upass="";
 					String cust_name="";
-					String query = "select * from custdata where id = ? and password = ?";
+					
 					try 
 					{
 						PreparedStatement ps = MyDConnection.con.prepareStatement(query);
+						
 						ps.setString(1, id.getText());
 						ps.setString(2, String.copyValueOf(pass.getPassword()));
+						
 						ResultSet res = ps.executeQuery();
+						
 						while(res.next())
 						{
-							flag = 1;
 							uid = res.getString(1);
 							upass = res.getString(5);
 							cust_name = res.getString(2);
 						}
+						
 						if(id.getText().equals(uid)&&(String.copyValueOf(pass.getPassword()).equals(upass)))
 						{
-							//Do the work if login is successful
+							// Do the work if login is successful
 							CustHome obj = new CustHome(upass,"HELLO "+cust_name.toUpperCase(), uid,welo);
 							obj.setVisible(true);
 							dispose();
@@ -122,8 +126,11 @@ public class UserLogin extends JFrame
 			}
 		});
 		
-		
 		add(panel1);
-		
+	}
+	
+	private boolean IsAnyFormFieldEmpty() {
+		return (id.getText().isEmpty())
+				|| (String.copyValueOf(pass.getPassword()).isEmpty());
 	}
 }

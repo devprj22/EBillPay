@@ -18,10 +18,11 @@ public class Welcome extends JFrame
 {
 	private static Welcome s_globalAppInstance = null;
 	
-	JPanel panel1,panel2,panel3;
-	JLabel l1,l2;
-	JButton b1,b2,b3,b4;
-	Welcome emp;
+	private JPanel panel1,panel2;
+	private JLabel labelWelcome, labelOptions;
+	private JButton btnAdmin, btnCustomer, btnNewUser, btnExit;
+	
+	private Welcome emp;
 	
 	public static Welcome GetInstance() {
 		if (s_globalAppInstance == null)
@@ -39,22 +40,23 @@ public class Welcome extends JFrame
 		
 		//creating the first panel for the display page
 		panel1 = new JPanel(new GridLayout(2, 1));
-		l1 = new JLabel("WELCOME TO EBILLPAY ");
-		l2 = new JLabel("Please Select Any of the following : ");
-		panel1.add(l1);
-		panel1.add(l2);
+		labelWelcome = new JLabel("WELCOME TO EBILLPAY ");
+		labelOptions = new JLabel("Please Select Any of the following : ");
+		
+		panel1.add(labelWelcome);
+		panel1.add(labelOptions);
 		
 		//creating the second panel that contains the buttons
 		panel2 = new JPanel(new FlowLayout());
-		b1 = new JButton("ADMIN",new ImageIcon("admin1m.png"));
-		b2 = new JButton("CUSTOMER", new ImageIcon("customers.png"));
-		b3 = new JButton("NEW USER", new ImageIcon("stock_people.png"));
-		b4 = new JButton("EXIT",new ImageIcon("cancel.png"));
+		btnAdmin = new JButton("ADMIN", new ImageIcon("admin1m.png"));
+		btnCustomer = new JButton("CUSTOMER", new ImageIcon("customers.png"));
+		btnNewUser = new JButton("NEW USER", new ImageIcon("stock_people.png"));
+		btnExit = new JButton("EXIT", new ImageIcon("cancel.png"));
 		
-		panel2.add(b1);
-		panel2.add(b2);
-		panel2.add(b3);
-		panel2.add(b4);
+		panel2.add(btnAdmin);
+		panel2.add(btnCustomer);
+		panel2.add(btnNewUser);
+		panel2.add(btnExit);
 		
 		//adding the panels
 		add(panel1);
@@ -62,7 +64,7 @@ public class Welcome extends JFrame
 		
 		//coding of the buttons
 		emp = this;
-		b4.addActionListener(new ActionListener() {
+		btnExit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) 
 			{
 				ExitFromWelcome obj = new ExitFromWelcome(emp, "EXIT....");
@@ -70,28 +72,29 @@ public class Welcome extends JFrame
 				dispose();
 			}
 		});
-		b3.addActionListener(new ActionListener()
+		
+		btnNewUser.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent ae)
 			{
-				Registration reg = new Registration("WELCOME TO REGISTRATION",emp);
+				Registration reg = new Registration("WELCOME TO REGISTRATION", emp);
 				reg.setVisible(true);
 				dispose();
 			}
 		});
 		
-		b1.addActionListener(new ActionListener() 
+		btnAdmin.addActionListener(new ActionListener() 
 		{	
 			@Override
 			public void actionPerformed(ActionEvent arg0)
 			{
-				AdminLogin obj = new AdminLogin("ADMIN LOGIN",emp);
+				AdminLogin obj = new AdminLogin("ADMIN LOGIN", emp);
 				dispose();
 				obj.setVisible(true);
 			}
 		});
 		
-		b2.addActionListener(new ActionListener() {
+		btnCustomer.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e)

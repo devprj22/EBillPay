@@ -9,21 +9,23 @@ import javax.swing.JLabel;
 
 public class ExitFromWelcome extends JFrame
 {
-	JLabel l1;
-	JButton b1,b2;
-	Welcome prev;
-	public ExitFromWelcome(Welcome obj,String msg)
+	private JLabel labelExit;
+	private JButton btnYes, btnStay;
+	
+	public ExitFromWelcome(Welcome obj, String msg)
 	{
 		super(msg);
 		setLayout(new FlowLayout());
 		setSize(300, 100);
 		setResizable(false);
 		setLocationRelativeTo(this);
-		l1 = new JLabel("CONFIRM EXIT");
-		b1 = new JButton("YES");
-		b2 = new JButton("STAY");
-		prev = obj; //reference of the welcome page that called it.
-		b1.addActionListener(new ActionListener()
+		
+		labelExit = new JLabel("CONFIRM EXIT");
+		
+		btnYes = new JButton("YES");
+		btnStay = new JButton("STAY");
+		
+		btnYes.addActionListener(new ActionListener()
 		{
 			@Override
 			public void actionPerformed(ActionEvent ae)
@@ -32,18 +34,18 @@ public class ExitFromWelcome extends JFrame
 			}
 		});
 		
-		b2.addActionListener(new ActionListener()
+		btnStay.addActionListener(new ActionListener()
 		{
 			@Override
 			public void actionPerformed(ActionEvent ae)
 			{
 				dispose();
-				prev.setVisible(true);
+				obj.setVisible(true);
 			}
 		});
 		
-		add(l1);
-		add(b1);
-		add(b2);
+		add(labelExit);
+		add(btnYes);
+		add(btnStay);
 	}
 }

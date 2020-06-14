@@ -35,6 +35,7 @@ public class Registration extends JFrame
 	private JTextField textField_6;
 	private JTextField textField_7;
 	private Welcome obj;
+	
 	public Registration(String msg, Welcome welo) 
 	{
 		super(msg);
