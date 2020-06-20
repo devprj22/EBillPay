@@ -15,16 +15,34 @@ public class ExitFromWelcome extends JFrame
 	public ExitFromWelcome(Welcome obj, String msg)
 	{
 		super(msg);
+		
+		initLayoutProperties();
+		
+		createAndAddElementsToLayout();
+		
+		initEventListeners(obj);
+		
+	}
+	
+	private void initLayoutProperties() {
 		setLayout(new FlowLayout());
 		setSize(300, 100);
 		setResizable(false);
 		setLocationRelativeTo(this);
-		
+	}
+	
+	private void createAndAddElementsToLayout() {
 		labelExit = new JLabel("CONFIRM EXIT");
 		
 		btnYes = new JButton("YES");
 		btnStay = new JButton("STAY");
 		
+		add(labelExit);
+		add(btnYes);
+		add(btnStay);
+	}
+	
+	private void initEventListeners(Welcome obj) {
 		btnYes.addActionListener(new ActionListener()
 		{
 			@Override
@@ -43,9 +61,5 @@ public class ExitFromWelcome extends JFrame
 				obj.setVisible(true);
 			}
 		});
-		
-		add(labelExit);
-		add(btnYes);
-		add(btnStay);
 	}
 }

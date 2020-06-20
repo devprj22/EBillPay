@@ -22,8 +22,6 @@ public class Welcome extends JFrame
 	private JLabel labelWelcome, labelOptions;
 	private JButton btnAdmin, btnCustomer, btnNewUser, btnExit;
 	
-	private Welcome emp;
-	
 	public static Welcome GetInstance() {
 		if (s_globalAppInstance == null)
 				s_globalAppInstance = new Welcome();
@@ -32,12 +30,23 @@ public class Welcome extends JFrame
 	
 	private Welcome() 
 	{
+		initLayoutProperties();
+		
+		createAndAddElementsToLayout();
+		
+		initEventListeners(this);
+	}
+	
+	private void initLayoutProperties() {
 		setLocation(300, 300);
 		setUndecorated(true);
 		setSize(700,200);
 		setLayout(new GridLayout(2,1));
 		setResizable(false);
-		
+	}
+	
+	private void createAndAddElementsToLayout()
+	{
 		//creating the first panel for the display page
 		panel1 = new JPanel(new GridLayout(2, 1));
 		labelWelcome = new JLabel("WELCOME TO EBILLPAY ");
@@ -61,9 +70,9 @@ public class Welcome extends JFrame
 		//adding the panels
 		add(panel1);
 		add(panel2);
-		
-		//coding of the buttons
-		emp = this;
+	}
+	
+	private void initEventListeners(Welcome emp) {
 		btnExit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) 
 			{

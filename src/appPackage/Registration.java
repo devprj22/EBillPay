@@ -36,10 +36,27 @@ public class Registration extends JFrame
 	private JTextField textField_7;
 	private Welcome obj;
 	
+	private JLabel label, lblNewLabel, lblPassword, lblRetypePassword, lblUserId, lblAccountType, lblGender, lblAddress, lblDateOfBirth;
+	private JLabel label_1, label_2, lblMobile, lblEmailId, lblDdmmyyyy;
+	private JCheckBox chckbxAdmin, chckbxCustomer, chckbxMale, chckbxFemale;
+	private JButton btnSubmit, btnReset, btnBack;
+	
+	GroupLayout gl_contentPane;
+	
 	public Registration(String msg, Welcome welo) 
 	{
 		super(msg);
 		obj = welo;
+		
+		initLayuotProperties();
+		
+		createAndAddElementsToLayout();
+		
+		initEventListeners();
+	}
+	
+	private void initLayuotProperties() {
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 492, 746);
 		contentPane = new JPanel();
@@ -47,193 +64,25 @@ public class Registration extends JFrame
 		setContentPane(contentPane);
 		setLocationRelativeTo(this);
 		setResizable(false);
-		
-		bg = new ButtonGroup();
-		bg1 = new ButtonGroup();
-		JLabel label = new JLabel(new ImageIcon("admin1.png"), JLabel.CENTER);
-		
-		JLabel lblNewLabel = new JLabel("Name : ");
-		
-		textField = new JTextField();
-		textField.setColumns(10);
-		
-		JLabel lblPassword = new JLabel("Password : ");
-		
-		passwordField = new JPasswordField();
-		
-		JLabel lblRetypePassword = new JLabel("Re-Type Password : ");
-		
-		passwordField_1 = new JPasswordField();
-		
-		JLabel lblUserId = new JLabel("User Id : ");
-		
-		textField_1 = new JTextField();
-		textField_1.setEditable(false);
-		textField_1.setColumns(10);
-		textField_1.setText(Integer.toString(gid()));
-		
-		JLabel lblAccountType = new JLabel("Account Type : ");
-		
-		JCheckBox chckbxAdmin = new JCheckBox("ADMIN");
-		JCheckBox chckbxCustomer = new JCheckBox("CUSTOMER");
-		
-		bg.add(chckbxAdmin);
-		bg.add(chckbxCustomer);
-		
-		JLabel lblGender = new JLabel("Gender : ");
-		
-		JCheckBox chckbxMale = new JCheckBox("MALE");
-		
-		JCheckBox chckbxFemale = new JCheckBox("FEMALE");
-		bg1.add(chckbxFemale);
-		bg1.add(chckbxMale);
-		
-		JLabel lblAddress = new JLabel("Address :");
-		
-		textField_2 = new JTextField();
-		textField_2.setColumns(10);
-		
-		JLabel lblDateOfBirth = new JLabel("Date Of Birth :");
-		
-		textField_3 = new JTextField();
-		textField_3.setColumns(10);
-		
-		JLabel label_1 = new JLabel("-");
-		
-		textField_4 = new JTextField();
-		textField_4.setColumns(10);
-		
-		JLabel label_2 = new JLabel("-");
-		
-		textField_5 = new JTextField();
-		textField_5.setColumns(10);
-		
-		JLabel lblMobile = new JLabel("Mobile : ");
-		
-		textField_6 = new JTextField();
-		textField_6.setColumns(10);
-		
-		JLabel lblEmailId = new JLabel("Email id :");
-		
-		textField_7 = new JTextField();
-		textField_7.setColumns(10);
-		
-		JButton btnSubmit = new JButton("SUBMIT",new ImageIcon("save.png"));
+	}
+	
+	private void initEventListeners()
+	{
 		btnSubmit.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) 
+			public void actionPerformed(ActionEvent e)
 			{
 				//Inserting if for the validation check that all the details are filled
-				if(!((textField.getText().isEmpty())||(textField_1.getText().isEmpty())||(textField_3.getText().isEmpty())||(textField_4.getText().isEmpty())||(textField_5.getText().isEmpty())||(textField_6.getText().isEmpty())||(textField_7.getText().isEmpty())||(String.copyValueOf(passwordField.getPassword()).isEmpty())||(String.copyValueOf(passwordField_1.getPassword()).isEmpty())||((!chckbxAdmin.isSelected())&&(!chckbxCustomer.isSelected()))||((!chckbxFemale.isSelected())&&(!chckbxMale.isSelected()))))
+				if(validateFormFields())
 				{
 					if(chckbxAdmin.isSelected())
 					{
-						String query = "insert into admindata values(?,?,?,?,?,?,?,?,?,?)";
-						try 
-						{
-							String gen="";
-							String pass="";
-							if(chckbxMale.isSelected())
-								gen="M";
-							if(chckbxFemale.isSelected())
-								gen="F";
-					
-							String p1 = String.copyValueOf(passwordField.getPassword());
-							String p2 = String.copyValueOf(passwordField_1.getPassword());
-							if(p1.equals(p2))
-							{
-								pass=p2;
-							}
-							else
-							{
-								JOptionPane.showMessageDialog(getParent(), "Password Field Mismatch Retry Again", "ERROR", JOptionPane.ERROR_MESSAGE);
-								dispose();
-								obj.setVisible(true);
-							}
-					
-							PreparedStatement ps = MyDConnection.con.prepareStatement(query);
-							ps.setString(1, textField_1.getText());
-							ps.setString(2, textField.getText().toUpperCase());
-							ps.setString(3, gen);
-							ps.setString(4, textField_2.getText());
-							ps.setString(5, pass);
-							ps.setString(6, textField_3.getText());
-							ps.setString(7, textField_4.getText());
-							ps.setString(8, textField_5.getText());
-							ps.setString(9, textField_6.getText());
-							ps.setString(10, textField_7.getText());
-							ps.executeUpdate();
-							JOptionPane.showMessageDialog(getParent(),"REGISTRATION SUCCESSFUL");
-							dispose();
-							obj.setVisible(true);
-						} 
-						catch (Exception e2) 
-						{
-					
-						}
+						perfromAdminRegistration();
 					}
 					else if(chckbxCustomer.isSelected())
 					{
-						String query = "insert into custdata values(?,?,?,?,?,?,?,?,?,?)";
-						try 
-						{
-							String gen="";
-							String pass="";
-							if(chckbxMale.isSelected())
-								gen="M";
-							if(chckbxFemale.isSelected())
-								gen="F";
-					
-							String p1 = String.copyValueOf(passwordField.getPassword());
-							String p2 = String.copyValueOf(passwordField_1.getPassword());
-							if(p1.equals(p2))
-							{
-								pass=p2;
-							}
-							else
-							{
-								JOptionPane.showMessageDialog(getParent(), "Password Field Mismatch Retry Again", "ERROR", JOptionPane.ERROR_MESSAGE);
-								dispose();
-								obj.setVisible(true);
-							}
-					
-							PreparedStatement ps = MyDConnection.con.prepareStatement(query);
-							ps.setString(1, textField_1.getText());
-							ps.setString(2, textField.getText().toUpperCase());
-							ps.setString(3, gen);
-							ps.setString(4, textField_2.getText());
-							ps.setString(5, pass);
-							ps.setString(6, textField_3.getText());
-							ps.setString(7, textField_4.getText());
-							ps.setString(8, textField_5.getText());
-							ps.setString(9, textField_6.getText());
-							ps.setString(10, textField_7.getText());
-							ps.executeUpdate();
-							JOptionPane.showMessageDialog(getParent(),"REGISTRATION SUCCESSFUL");
-							
-							//THIS IS THE MODIFICATION TO ADD THE ID IN THE BILL DATA TABLE
-							String query1 = "insert into billdata values(?,?,?,?,?,?,?,?,?,?,?)";
-							ps = MyDConnection.con.prepareStatement(query1);
-							ps.setString(1, textField_1.getText());
-							ps.setString(2, "00");
-							ps.setString(3, "00");
-							ps.setString(4, "2015");
-							ps.setString(5, "00");
-							ps.setString(6, "00");
-							ps.setString(7, "2015");
-							ps.setString(8, "0");
-							ps.setString(9, "0");
-							ps.setString(10, "PAID");
-							ps.setString(11, "0");
-							ps.executeUpdate();
-							dispose();
-							obj.setVisible(true);
-						} 
-						catch (Exception e2) 
-							{
-					
-							}
-						}
+						performCustomerRegistration();
 					}
+				}
 				else
 				{
 					JOptionPane.showMessageDialog(getParent(), "FIELD INCOMPLETE", "Please fill all the fields", JOptionPane.ERROR_MESSAGE);
@@ -241,7 +90,7 @@ public class Registration extends JFrame
 			}
 		});
 		
-		JButton btnReset = new JButton("RESET",new ImageIcon("undo.png"));
+		
 		btnReset.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) 
 			{
@@ -257,7 +106,7 @@ public class Registration extends JFrame
 			}
 		});
 		
-		JButton btnBack = new JButton("BACK",new ImageIcon("back.png"));
+		
 		btnBack.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) 
 			{
@@ -265,10 +114,198 @@ public class Registration extends JFrame
 				dispose();
 			}
 		});
+
+	}
+	
+	
+	private void perfromAdminRegistration() {
+		String query = "insert into admindata values(?,?,?,?,?,?,?,?,?,?)";
+		try 
+		{
+			String gen="";
+			String pass="";
+			if(chckbxMale.isSelected())
+				gen="M";
+			if(chckbxFemale.isSelected())
+				gen="F";
+	
+			String p1 = String.copyValueOf(passwordField.getPassword());
+			String p2 = String.copyValueOf(passwordField_1.getPassword());
+			if(p1.equals(p2))
+			{
+				pass=p2;
+			}
+			else
+			{
+				JOptionPane.showMessageDialog(getParent(), "Password Field Mismatch Retry Again", "ERROR", JOptionPane.ERROR_MESSAGE);
+				dispose();
+				obj.setVisible(true);
+			}
+	
+			PreparedStatement ps = MyDConnection.con.prepareStatement(query);
+			ps.setString(1, textField_1.getText());
+			ps.setString(2, textField.getText().toUpperCase());
+			ps.setString(3, gen);
+			ps.setString(4, textField_2.getText());
+			ps.setString(5, pass);
+			ps.setString(6, textField_3.getText());
+			ps.setString(7, textField_4.getText());
+			ps.setString(8, textField_5.getText());
+			ps.setString(9, textField_6.getText());
+			ps.setString(10, textField_7.getText());
+			ps.executeUpdate();
+			JOptionPane.showMessageDialog(getParent(),"REGISTRATION SUCCESSFUL");
+			dispose();
+			obj.setVisible(true);
+		} 
+		catch (Exception e2) 
+		{
+	
+		}
+	}
+	
+	private void performCustomerRegistration() {
+		String query = "insert into custdata values(?,?,?,?,?,?,?,?,?,?)";
+		try 
+		{
+			String gen="";
+			String pass="";
+			if(chckbxMale.isSelected())
+				gen="M";
+			if(chckbxFemale.isSelected())
+				gen="F";
+	
+			String p1 = String.copyValueOf(passwordField.getPassword());
+			String p2 = String.copyValueOf(passwordField_1.getPassword());
+			if(p1.equals(p2))
+			{
+				pass=p2;
+			}
+			else
+			{
+				JOptionPane.showMessageDialog(getParent(), "Password Field Mismatch Retry Again", "ERROR", JOptionPane.ERROR_MESSAGE);
+				dispose();
+				obj.setVisible(true);
+			}
+			PreparedStatement ps = MyDConnection.con.prepareStatement(query);
+			ps.setString(1, textField_1.getText());
+			ps.setString(2, textField.getText().toUpperCase());
+			ps.setString(3, gen);
+			ps.setString(4, textField_2.getText());
+			ps.setString(5, pass);
+			ps.setString(6, textField_3.getText());
+			ps.setString(7, textField_4.getText());
+			ps.setString(8, textField_5.getText());
+			ps.setString(9, textField_6.getText());
+			ps.setString(10, textField_7.getText());
+			ps.executeUpdate();
+			JOptionPane.showMessageDialog(getParent(),"REGISTRATION SUCCESSFUL");
+			
+			//THIS IS THE MODIFICATION TO ADD THE ID IN THE BILL DATA TABLE
+			String query1 = "insert into billdata values(?,?,?,?,?,?,?,?,?,?,?)";
+			ps = MyDConnection.con.prepareStatement(query1);
+			ps.setString(1, textField_1.getText());
+			ps.setString(2, "00");
+			ps.setString(3, "00");
+			ps.setString(4, "2015");
+			ps.setString(5, "00");
+			ps.setString(6, "00");
+			ps.setString(7, "2015");
+			ps.setString(8, "0");
+			ps.setString(9, "0");
+			ps.setString(10, "PAID");
+			ps.setString(11, "0");
+			ps.executeUpdate();
+			dispose();
+			obj.setVisible(true);
+		} 
+		catch (Exception e2) 
+		{
+	
+		}	
+	}
+	
+	private void createAndAddElementsToLayout() {
+		bg = new ButtonGroup();
+		bg1 = new ButtonGroup();
+		label = new JLabel(new ImageIcon("admin1.png"), JLabel.CENTER);
 		
-		JLabel lblDdmmyyyy = new JLabel("(dd-mm-yyyy)");
+		lblNewLabel = new JLabel("Name : ");
 		
-		GroupLayout gl_contentPane = new GroupLayout(contentPane);
+		textField = new JTextField();
+		textField.setColumns(10);
+		
+		lblPassword = new JLabel("Password : ");
+		
+		passwordField = new JPasswordField();
+		
+		lblRetypePassword = new JLabel("Re-Type Password : ");
+		
+		passwordField_1 = new JPasswordField();
+		
+		lblUserId = new JLabel("User Id : ");
+		
+		textField_1 = new JTextField();
+		textField_1.setEditable(false);
+		textField_1.setColumns(10);
+		textField_1.setText(Integer.toString(gid()));
+		
+		lblAccountType = new JLabel("Account Type : ");
+		
+		chckbxAdmin = new JCheckBox("ADMIN");
+		chckbxCustomer = new JCheckBox("CUSTOMER");
+		
+		bg.add(chckbxAdmin);
+		bg.add(chckbxCustomer);
+		
+		lblGender = new JLabel("Gender : ");
+		
+		chckbxMale = new JCheckBox("MALE");
+		
+		chckbxFemale = new JCheckBox("FEMALE");
+		bg1.add(chckbxFemale);
+		bg1.add(chckbxMale);
+		
+		lblAddress = new JLabel("Address :");
+		
+		textField_2 = new JTextField();
+		textField_2.setColumns(10);
+		
+		lblDateOfBirth = new JLabel("Date Of Birth :");
+		
+		textField_3 = new JTextField();
+		textField_3.setColumns(10);
+		
+		label_1 = new JLabel("-");
+		
+		textField_4 = new JTextField();
+		textField_4.setColumns(10);
+		
+		label_2 = new JLabel("-");
+		
+		textField_5 = new JTextField();
+		textField_5.setColumns(10);
+		
+		lblMobile = new JLabel("Mobile : ");
+		
+		textField_6 = new JTextField();
+		textField_6.setColumns(10);
+		
+		lblEmailId = new JLabel("Email id :");
+		
+		textField_7 = new JTextField();
+		textField_7.setColumns(10);
+		
+		btnSubmit = new JButton("SUBMIT",new ImageIcon("save.png"));
+		btnReset = new JButton("RESET",new ImageIcon("undo.png"));
+		btnBack = new JButton("BACK",new ImageIcon("back.png"));
+		lblDdmmyyyy = new JLabel("(dd-mm-yyyy)");
+		
+		initControlPane();
+	}
+	
+	private void initControlPane() {
+		gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_contentPane.createSequentialGroup()
@@ -391,7 +428,8 @@ public class Registration extends JFrame
 		contentPane.setLayout(gl_contentPane);
 	}
 	
-	public int gid()  //function that creates an id of 7 digits
+	
+	private int gid()  //function that creates an id of 7 digits
 	{
 		int id;
 		String val="";
@@ -401,5 +439,21 @@ public class Registration extends JFrame
 		}
 		id = Integer.parseInt(val);
 		return id;
+	}
+	
+	private boolean validateFormFields() {
+		return !((textField.getText().isEmpty())
+				||(textField_1.getText().isEmpty())
+				||(textField_3.getText().isEmpty())
+				||(textField_4.getText().isEmpty())
+				||(textField_5.getText().isEmpty())
+				||(textField_6.getText().isEmpty())
+				||(textField_7.getText().isEmpty())
+				||(String.copyValueOf(passwordField.getPassword()).isEmpty())
+				||(String.copyValueOf(passwordField_1.getPassword()).isEmpty())
+				||((!chckbxAdmin.isSelected())
+						&&(!chckbxCustomer.isSelected()))
+				||((!chckbxFemale.isSelected())
+						&&(!chckbxMale.isSelected())));
 	}
 }
