@@ -43,6 +43,8 @@ public class Registration extends JFrame
 	
 	GroupLayout gl_contentPane;
 	
+	private enum userType {ADMIN, CUSTOMER};
+	
 	public Registration(String msg, Welcome welo) 
 	{
 		super(msg);
@@ -119,7 +121,42 @@ public class Registration extends JFrame
 	
 	
 	private void perfromAdminRegistration() {
-		String query = "insert into admindata values(?,?,?,?,?,?,?,?,?,?)";
+		performRegistration(userType.ADMIN);
+	}
+	
+	private void performCustomerRegistration() {
+		try 
+		{
+			performRegistration(userType.CUSTOMER);
+			
+			//THIS IS THE MODIFICATION TO ADD THE ID IN THE BILL DATA TABLE
+			String query1 = "insert into billdata values(?,?,?,?,?,?,?,?,?,?,?)";
+			PreparedStatement ps = MyDConnection.con.prepareStatement(query1);
+			ps.setString(1, textField_1.getText());
+			ps.setString(2, "00");
+			ps.setString(3, "00");
+			ps.setString(4, "2015");
+			ps.setString(5, "00");
+			ps.setString(6, "00");
+			ps.setString(7, "2015");
+			ps.setString(8, "0");
+			ps.setString(9, "0");
+			ps.setString(10, "PAID");
+			ps.setString(11, "0");
+			ps.executeUpdate();
+			dispose();
+			obj.setVisible(true);
+		} 
+		catch (Exception e2) 
+		{
+	
+		}	
+	}
+	
+	private void performRegistration(final userType type) {
+		String userQueryParam = (type == userType.ADMIN) ?  "admindata" : "custdata";
+				
+		String query = "insert into "+ userQueryParam +" values(?,?,?,?,?,?,?,?,?,?)";
 		try 
 		{
 			String gen="";
@@ -162,67 +199,6 @@ public class Registration extends JFrame
 		{
 	
 		}
-	}
-	
-	private void performCustomerRegistration() {
-		String query = "insert into custdata values(?,?,?,?,?,?,?,?,?,?)";
-		try 
-		{
-			String gen="";
-			String pass="";
-			if(chckbxMale.isSelected())
-				gen="M";
-			if(chckbxFemale.isSelected())
-				gen="F";
-	
-			String p1 = String.copyValueOf(passwordField.getPassword());
-			String p2 = String.copyValueOf(passwordField_1.getPassword());
-			if(p1.equals(p2))
-			{
-				pass=p2;
-			}
-			else
-			{
-				JOptionPane.showMessageDialog(getParent(), "Password Field Mismatch Retry Again", "ERROR", JOptionPane.ERROR_MESSAGE);
-				dispose();
-				obj.setVisible(true);
-			}
-			PreparedStatement ps = MyDConnection.con.prepareStatement(query);
-			ps.setString(1, textField_1.getText());
-			ps.setString(2, textField.getText().toUpperCase());
-			ps.setString(3, gen);
-			ps.setString(4, textField_2.getText());
-			ps.setString(5, pass);
-			ps.setString(6, textField_3.getText());
-			ps.setString(7, textField_4.getText());
-			ps.setString(8, textField_5.getText());
-			ps.setString(9, textField_6.getText());
-			ps.setString(10, textField_7.getText());
-			ps.executeUpdate();
-			JOptionPane.showMessageDialog(getParent(),"REGISTRATION SUCCESSFUL");
-			
-			//THIS IS THE MODIFICATION TO ADD THE ID IN THE BILL DATA TABLE
-			String query1 = "insert into billdata values(?,?,?,?,?,?,?,?,?,?,?)";
-			ps = MyDConnection.con.prepareStatement(query1);
-			ps.setString(1, textField_1.getText());
-			ps.setString(2, "00");
-			ps.setString(3, "00");
-			ps.setString(4, "2015");
-			ps.setString(5, "00");
-			ps.setString(6, "00");
-			ps.setString(7, "2015");
-			ps.setString(8, "0");
-			ps.setString(9, "0");
-			ps.setString(10, "PAID");
-			ps.setString(11, "0");
-			ps.executeUpdate();
-			dispose();
-			obj.setVisible(true);
-		} 
-		catch (Exception e2) 
-		{
-	
-		}	
 	}
 	
 	private void createAndAddElementsToLayout() {
