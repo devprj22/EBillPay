@@ -29,13 +29,20 @@ public class AdminLogin extends JFrame
 	public AdminLogin(String msg, Welcome parentObj)
 	{
 		super(msg);
-		
+		initLayoutProperties();
+		createAndAddElementsToLayout();
+		initEventListeners(parentObj);
+	}
+	
+	private void initLayoutProperties() {
 		setSize(400,200);
 		setLayout(new FlowLayout());
 		setLocationRelativeTo(this);
 		setResizable(false);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		
+	}
+	
+	private void createAndAddElementsToLayout() {
 		labelUserId = new JLabel("ENTER USER ID :");
 		labelPassword = new JLabel("ENTER PASSWORD : ");
 		
@@ -53,6 +60,11 @@ public class AdminLogin extends JFrame
 		panel1.add(btnAdmin);
 		panel1.add(btnUndo);
 		panel1.add(btnBack);
+		
+		add(panel1);
+	}
+	
+	private void initEventListeners(Welcome parentObj) {
 		
 		btnUndo.addActionListener(new ActionListener() {
 			
@@ -103,8 +115,10 @@ public class AdminLogin extends JFrame
 							admin_name = res.getString(2);
 						}
 						
-						if(	id.getText().equals(uid)
-							&& (String.copyValueOf(pass.getPassword()).equals(upass)))
+						final boolean isLoginCredentailValid = id.getText().equals(uid)
+								&& (String.copyValueOf(pass.getPassword()).equals(upass));
+						
+						if(isLoginCredentailValid)
 						{
 							// Do the work if login is successful
 							AdminHome obj = new AdminHome(upass, "HELLO " + admin_name.toUpperCase(), uid, parentObj);
@@ -123,8 +137,6 @@ public class AdminLogin extends JFrame
 				}
 			}
 		});
-		
-		add(panel1);
 	}
 	
 	private boolean IsAnyFormFieldEmpty()
