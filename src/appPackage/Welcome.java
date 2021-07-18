@@ -97,7 +97,7 @@ public class Welcome extends JFrame
 			@Override
 			public void actionPerformed(ActionEvent arg0)
 			{
-				AdminLogin obj = new AdminLogin("ADMIN LOGIN", emp);
+				AdminLoginUI obj = new AdminLoginUI("ADMIN LOGIN", emp);
 				dispose();
 				obj.setVisible(true);
 			}

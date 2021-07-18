@@ -16,7 +16,7 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
-public class AdminLogin extends JFrame
+public class AdminLoginUI extends JFrame
 {
 	private JTextField id;
 	private JPasswordField pass;
@@ -24,9 +24,7 @@ public class AdminLogin extends JFrame
 	private JButton btnAdmin, btnUndo, btnBack;
 	private JPanel panel1;
 	
-	private final static String query = "select * from admindata where id = ? and password = ?";
-	
-	public AdminLogin(String msg, Welcome parentObj)
+	public AdminLoginUI(String msg, Welcome parentObj)
 	{
 		super(msg);
 		initLayoutProperties();
@@ -97,42 +95,19 @@ public class AdminLogin extends JFrame
 				}
 				else
 				{
-					String uid="",upass="";
-					String admin_name="";
-					
-					try 
+
+					AdminLoginProcessor adminLoginProcessor = new AdminLoginProcessor(id.getText(), String.copyValueOf(pass.getPassword()));
+
+					if(adminLoginProcessor.IsValidAdmin())
 					{
-						PreparedStatement ps = MyDConnection.con.prepareStatement(query);
-						ps.setString(1, id.getText());
-						ps.setString(2, String.copyValueOf(pass.getPassword()));
-						
-						final ResultSet res = ps.executeQuery();
-						
-						while(res.next())
-						{
-							uid = res.getString(1);
-							upass = res.getString(5);
-							admin_name = res.getString(2);
-						}
-						
-						final boolean isLoginCredentailValid = id.getText().equals(uid)
-								&& (String.copyValueOf(pass.getPassword()).equals(upass));
-						
-						if(isLoginCredentailValid)
-						{
-							// Do the work if login is successful
-							AdminHome obj = new AdminHome(upass, "HELLO " + admin_name.toUpperCase(), uid, parentObj);
-							obj.setVisible(true);
-							dispose();
-						}
-						else
-						{
-							JOptionPane.showMessageDialog(getParent(), "INCORRECT DATA PLEASE TRY AGAIN", "RECORD NOT FOUND", JOptionPane.ERROR_MESSAGE);
-						}
-					} 
-					catch (SQLException e1)
+						// Do the work if login is successful
+						AdminHome obj = new AdminHome(adminLoginProcessor.GetAdminPassword(), "HELLO " + adminLoginProcessor.GetAdminName().toUpperCase(), adminLoginProcessor.GetAdminId(), parentObj);
+						obj.setVisible(true);
+						dispose();
+					}
+					else
 					{
-						e1.printStackTrace();
+						JOptionPane.showMessageDialog(getParent(), "INCORRECT DATA PLEASE TRY AGAIN", "RECORD NOT FOUND", JOptionPane.ERROR_MESSAGE);
 					}
 				}
 			}
