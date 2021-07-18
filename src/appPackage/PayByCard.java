@@ -114,7 +114,7 @@ public class PayByCard extends JFrame {
 					{
 						JOptionPane.showMessageDialog(getParent(), "PAYMENT SUCCESSFUL,TRANSACTION ID : "+generateAndSetTID(cid), "CONFRMATION", JOptionPane.INFORMATION_MESSAGE);
 						try {
-							new PrintReciept(cname, cid, cdob , cmobile , cgender, caddress, cemail , csdate, cenddate, cunits, camount, ctoday , generateAndSetTID(cid));
+							new PrintReciept(new PrintReceiptData(cname, cid, cdob , cmobile , cgender, caddress, cemail , csdate, cenddate, cunits, camount, ctoday , generateAndSetTID(cid)));
 						} catch (IOException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();

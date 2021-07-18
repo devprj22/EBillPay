@@ -9,7 +9,7 @@ public class PrintReciept
 {
 	JFileChooser obj = new JFileChooser();
 	File f;
-   public PrintReciept(String cname, String cid, String cdob , String cmobile , String cgender , String caddress , String cemail , String csdate , String cenddate , String cunits , String camount, String ctoday, String ctid) throws IOException 
+   public PrintReciept(PrintReceiptData printReceiptData) throws IOException 
    {
 	   try
 	   {
@@ -23,7 +23,7 @@ public class PrintReciept
 		   else if(val == JFileChooser.CANCEL_OPTION)
 		   {
 			   JOptionPane.showMessageDialog(null, "YOU CHOOSE CANCEL. FILE WILL BE SAVED IN D: WITH THE NAME SAME AS TRANSACTION ID");
-			   f = new File("D:",ctid+".txt");
+			   f = new File("D:",printReceiptData.ctid+".txt");
 			   if(!f.exists())
 				   f.createNewFile();
 		   }
@@ -34,19 +34,19 @@ public class PrintReciept
 	   }
 	   PrintWriter pr = new PrintWriter(f);
 	   pr.println("\t\t\tPAYMENT RECIEPT");
-	   pr.println("NAME : "+cname);
-	   pr.println("USER ID : "+cid);
-	   pr.println("DATE OF BIRTH : "+cdob);
-	   pr.println("MOBILE NUMBER : "+cmobile);
-	   pr.println("GENDER : "+cgender);
-	   pr.println("ADDRESS : "+caddress);
-	   pr.println("EMAIL : "+cemail);
-	   pr.print("BILL START DATE : "+csdate);
-	   pr.println("\tBILL END DATE : "+cenddate);
-	   pr.println("UNITS USED : "+ cunits);
-	   pr.println("AMOUNT PAID : "+camount);
-	   pr.println("DATE OF PAYMENT : "+ctoday);
-	   pr.println("TRANSACTION ID : "+ctid);
+	   pr.println("NAME : "+ printReceiptData.cname);
+	   pr.println("USER ID : "+printReceiptData.cid);
+	   pr.println("DATE OF BIRTH : "+printReceiptData.cdob);
+	   pr.println("MOBILE NUMBER : "+printReceiptData.cmobile);
+	   pr.println("GENDER : "+ printReceiptData.cgender);
+	   pr.println("ADDRESS : "+ printReceiptData.caddress);
+	   pr.println("EMAIL : "+ printReceiptData.cemail);
+	   pr.print("BILL START DATE : "+ printReceiptData.csdate);
+	   pr.println("\tBILL END DATE : "+ printReceiptData.cenddate);
+	   pr.println("UNITS USED : "+  printReceiptData.cunits);
+	   pr.println("AMOUNT PAID : "+ printReceiptData.camount);
+	   pr.println("DATE OF PAYMENT : "+ printReceiptData.ctoday);
+	   pr.println("TRANSACTION ID : "+ printReceiptData.ctid);
 	   pr.close();
    }
 }

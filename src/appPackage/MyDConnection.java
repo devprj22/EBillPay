@@ -21,7 +21,5 @@ public class MyDConnection
 		{
 			e.printStackTrace();
 		}
-		//System.out.println("Driver Loaded Successfully");
-		//System.out.println("Connection Loaded : "+con);
 	}
 }
